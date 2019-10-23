@@ -2,6 +2,7 @@ import sys
 import numpy as np
 import pandas as pd
 import re
+import pickle
 from sqlalchemy import create_engine
 from sqlalchemy import inspect
 from nltk.tokenize import word_tokenize
@@ -10,6 +11,7 @@ import nltk
 nltk.download(['punkt', 'wordnet'])
 nltk.download('stopwords')
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.multioutput import MultiOutputClassifier
@@ -91,12 +93,25 @@ def evaluate_model(model, X_test, Y_test, category_names):
     
     INPUT:
         model: trained model
+        X_test: Test features
+        Y_test: Test labels
+        category_names: Str array of category names
     """
-    pass
+    y_pred = model.predict(X_test)
+    print(classification_report(Y_test.values, y_pred, target_names=category_names))
+    cat_count = len(Y_test.columns)
+    for i in range(cat_count):
+        print("Accuracy score for " + Y_test.columns[i], accuracy_score(Y_test.values[:,i], y_pred[:,i]))
 
 
 def save_model(model, model_filepath):
-    # save model to a pickle file
+    """
+    Save model to a pickle file
+    
+    INPUT:
+        model: trained model
+        model_filepath: desired save path for the model
+    """
     pickle.dump(model, open(model_filepath, 'wb'))
 
 

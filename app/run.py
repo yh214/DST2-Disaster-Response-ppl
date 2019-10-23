@@ -26,11 +26,11 @@ def tokenize(text):
     return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/YourDatabaseName.db')
-df = pd.read_sql_table('YourTableName', engine)
+engine = create_engine('sqlite:///../data/DisasterResponse.db')
+df = pd.read_sql_table('DisasterResponse', engine)
 
 # load model
-model = joblib.load("../models/your_model_name.pkl")
+model = joblib.load("../models/classifier.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -65,6 +65,24 @@ def index():
             }
         }
     ]
+
+    graph_two = []
+    correlation_values = df.iloc[:,4:].corr().values
+    category_names = list(df.iloc[:,4:].columns)
+
+    graph_two = {
+        'data': [
+            Heatmap(
+                x = category_names,
+                y = category_names[::-1],
+                z = correlation_values
+            )
+        ],
+
+        'layout': {
+            'title': 'Message category heatmap'
+        }
+    }
     
     # encode plotly graphs in JSON
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]

@@ -39,9 +39,9 @@ def clean_data(df):
         categories[column] = categories[column].str[-1]
         # convert column from string to numeric
         categories[column] = pd.to_numeric(categories[column])
-    cleaned_df = df.drop('categories', axis = 1, inplace = True)
+    df.drop('categories', axis = 1, inplace = True)
     # concatenate the original dataframe with the new `categories` dataframe
-    cleaned_df[categories.columns] = categories
+    cleaned_df = pd.concat([df, categories], axis=1)
     # drop duplicates
     cleaned_df.drop_duplicates(inplace = True)
     return cleaned_df
@@ -55,7 +55,7 @@ def save_data(df, database_filename):
         df: clean data frame from clean_data function
         database_filename: filename of the SQL database file
     """
-    engine = create_engine('sqlite:///' + database_file_name)
+    engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('DisasterResponse', engine, index=False) 
 
 

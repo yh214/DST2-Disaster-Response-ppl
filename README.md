@@ -1,5 +1,9 @@
 # Disaster Response Pipeline Project
 
+### Overview:
+
+This project provides a disaster response pipeline though a web application. The application will automatically tokenise the message and build statistics.
+
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
