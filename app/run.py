@@ -8,6 +8,7 @@ from nltk.tokenize import word_tokenize
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
+from plotly.graph_objs import Heatmap
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -75,15 +76,17 @@ def index():
             Heatmap(
                 x = category_names,
                 y = category_names[::-1],
-                z = correlation_values
+                z = correlation_values,
+                colorscale = 'Viridis'
             )
         ],
 
         'layout': {
-            'title': 'Message category heatmap'
+            'title': 'Message category correlation heatmap'
         }
     }
     
+    graphs.append(graph_two)
     # encode plotly graphs in JSON
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
